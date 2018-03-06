@@ -12,9 +12,8 @@ services:
       context: ..
       dockerfile: vm/Dockerfile.truffle
     tty: true
-    stdin_open: true
     volumes:
       - ../src/:/src/
     depends_on:
       - "devnet"
-      
+    entrypoint: /bin/sh
