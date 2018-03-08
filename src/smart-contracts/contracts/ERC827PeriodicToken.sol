@@ -6,7 +6,7 @@ import './PeriodicToken.sol';
 /**
    From zepplin-solidity ERC827Token.sol
  */
-contract ERC827Token is ERC827, PeriodicToken {
+contract ERC827PeriodicToken is ERC827, PeriodicToken {
 
     function approve(address _spender, uint256 _value, bytes _data) public returns (bool) {
     require(_spender != address(this));
