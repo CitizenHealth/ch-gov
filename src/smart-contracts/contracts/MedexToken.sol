@@ -1,7 +1,6 @@
 pragma solidity ^0.4.18;
 
-import 'zeppelin-solidity/contracts/token/ERC827/ERC827Token.sol';
-import 'zeppelin-solidity/contracts/token/ERC20/MintableToken.sol';
+import './ERC827PeriodicToken.sol';
 
 contract MedexToken is ERC827PeriodicToken {
   string public constant name = "Pre-medex";
@@ -12,8 +11,8 @@ contract MedexToken is ERC827PeriodicToken {
 
   function MedexToken () public {
     totalSupply_ = INITIAL_SUPPLY;
-    holdings[msg.sender].push(Balance{period: 0,
-                                      amount: INITIAL_SUPPLY});
+    holdings[msg.sender].push(Balance({period: 0,
+                                       amount: INITIAL_SUPPLY}));
     Transfer(0x0, msg.sender, INITIAL_SUPPLY);
   }  
   
