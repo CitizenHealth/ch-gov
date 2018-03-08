@@ -3,7 +3,7 @@ pragma solidity ^0.4.18;
 import 'zeppelin-solidity/contracts/token/ERC827/ERC827Token.sol';
 import 'zeppelin-solidity/contracts/token/ERC20/MintableToken.sol';
 
-contract MedexToken is ERC827Token, MintableToken {
+contract MedexToken is ERC827PeriodicToken {
   string public constant name = "Pre-medex";
   string public constant symbol = "MDX";
   uint public constant decimals = 18;
