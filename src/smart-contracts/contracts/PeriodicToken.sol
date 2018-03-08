@@ -28,11 +28,19 @@ contract PeriodicToken is ERC20, Ownable {
   }
 
   function blanaceOf(address _owner) public view returns (uint256) {
-   Balance[] storage balances = holdings[_owner];
+   Balance[] memory balances = holdings[_owner];
     if(balances.length == 0) {
       return 0;
     }
     return balances[balances.length-1].amount;
+  }
+
+  function balanceAt(address _owner, uint256 period) public view returns (uint256) {
+    Balance[] memory balances = holdings[_owner];
+    if(balances.length == 0 || period > currentPeriod) {
+      return 0;
+    }
+    return balances[period].amount;
   }
 
   function transfer(address _to, uint256 _value) public returns (bool) {
