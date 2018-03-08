@@ -12,7 +12,8 @@ contract MedexToken is ERC827PeriodicToken {
 
   function MedexToken () public {
     totalSupply_ = INITIAL_SUPPLY;
-    balances[msg.sender] = INITIAL_SUPPLY;
+    holdings[msg.sender].push(Balance{period: 0,
+                                      amount: INITIAL_SUPPLY});
     Transfer(0x0, msg.sender, INITIAL_SUPPLY);
   }  
   
