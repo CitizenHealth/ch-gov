@@ -16,7 +16,8 @@ contract VotingPlatform {
   enum Result {
     UNDECIDED,
     DECIDED,
-    TIED
+    TIED,
+    INVALID
   }
 
   struct Proposal {
