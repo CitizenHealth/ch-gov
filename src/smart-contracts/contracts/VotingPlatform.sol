@@ -2,7 +2,6 @@ pragma solidity ^0.4.18;
 
 contract VotingPlatform {
 
-  PeriodicToken public backingToken;
   uint256 public ballotDeposit;
   uint256 public proposalDeposit;
   mapping (uint256 => Ballot) public ballots;
