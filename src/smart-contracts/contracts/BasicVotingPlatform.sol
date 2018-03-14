@@ -52,6 +52,11 @@ contract BasicVotingPlatform is VotingPlatform {
   
   function ballotResult(uint256 _ballotId) public view returns (Result, Proposal[]) {
     require(ballots.length < _ballotId);
+
+    if(ballotStatus(_ballotId != Status.AMENABLE) &&
+       proposals[_ballotId].length == 0) {
+      return (Result.INVALID, new Proposal[](0));
+    }
     
     if(ballotStatus(_ballotId) != Status.CLOSED) {
       return (Result.UNDECIDED, new Proposal[](0));
