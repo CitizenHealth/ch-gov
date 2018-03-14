@@ -23,7 +23,6 @@ contract VotingPlatform {
     uint256 id;
     string proposal;
     address proposer;
-    // uint256 deposited;
     uint256 votes;
   }
   
@@ -31,7 +30,6 @@ contract VotingPlatform {
     uint256 id;
     bytes32 title;
     address creator;
-    // uint256 deposited;
   }
 
   function createBallot(bytes32 _title) public returns (uint256);

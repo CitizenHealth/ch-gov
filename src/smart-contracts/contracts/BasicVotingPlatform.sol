@@ -34,7 +34,7 @@ contract BasicVotingPlatform is VotingPlatform {
     return _id;
   }
 
-  function getVotesFor(address voter) public returns (uint256);
+  function getVotesFor(address _voter, uint256 _ballotId) public view returns (uint256);
 
   function vote(uint256 _ballotId, uint256 _proposalId) public returns (bool) {
     require(_ballotId < ballots.length);    
@@ -42,7 +42,7 @@ contract BasicVotingPlatform is VotingPlatform {
     require(proposals[_ballotId].length < _proposalId);
     require(!voted[msg.sender][_ballotId]);
 
-    uint256 votes = getVotesFor(msg.sender);
+    uint256 votes = getVotesFor(msg.sender, _ballotId);
     proposals[_ballotId][_proposalId].votes.add(votes);
     voted[msg.sender][_ballotId] = true;
 
@@ -76,7 +76,7 @@ contract BasicVotingPlatform is VotingPlatform {
         props[done] = Proposal({id: next.id,
                                 proposal: next.proposal,
                                 proposer: next.proposer,
-                                votes: next.votes});
+                                votes: max});
         done++;
       }
     }

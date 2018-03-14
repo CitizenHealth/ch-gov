@@ -13,13 +13,16 @@ contract PeriodicToken is ERC20, Ownable {
   }
 
   uint256 totalSupply_;
-  uint256 public currentPeriod = 0;
+  uint256 public currentPeriod_ = 0;
   mapping(address => Balance[]) internal holdings;
   mapping(address => mapping (address => uint256)) internal allowed;
 
+  function currentPeriod() public view returns (uint256) {
+    return currentPeriod_;
+  }
+
   function nextPeriod() public onlyOwner returns (bool) {
-    currentPeriod = currentPeriod.add(1);
-    PeriodBump(msg.sender);
+    currentPeriod_ = currentPeriod_.add(1);
     return true;
   }
 
@@ -37,7 +40,7 @@ contract PeriodicToken is ERC20, Ownable {
 
   function balanceAt(address _owner, uint256 period) public view returns (uint256) {
     Balance[] memory balances = holdings[_owner];
-    if(balances.length == 0 || period > currentPeriod) {
+    if(balances.length == 0 || period > currentPeriod()) {
       return 0;
     }
     return balances[period].amount;
@@ -53,16 +56,16 @@ contract PeriodicToken is ERC20, Ownable {
     }
 
     Balance storage last = holdings[msg.sender][holdings[msg.sender].length-1];
-    if(last.period < currentPeriod) {
-      holdings[msg.sender].push(Balance({period: currentPeriod,
+    if(last.period < currentPeriod()) {
+      holdings[msg.sender].push(Balance({period: currentPeriod(),
                                          amount: last.amount.sub(_value)}));
     } else {
       last.amount = last.amount.sub(_value);
     }
 
     if(holdings[_to].length == 0 ||
-       holdings[_to][holdings[_to].length-1].period < currentPeriod) {
-      holdings[_to].push(Balance({period: currentPeriod,
+       holdings[_to][holdings[_to].length-1].period < currentPeriod()) {
+      holdings[_to].push(Balance({period: currentPeriod(),
                                   amount: last.amount.add(_value)}));
     } else {
       holdings[_to][holdings[_to].length-1].amount =
@@ -82,8 +85,8 @@ contract PeriodicToken is ERC20, Ownable {
       return true;
     }
     Balance storage last = holdings[_from][holdings[_from].length-1];
-    if(last.period < currentPeriod) {
-      holdings[_from].push(Balance({period: currentPeriod,
+    if(last.period < currentPeriod()) {
+      holdings[_from].push(Balance({period: currentPeriod(),
                                     amount: last.amount.sub(_value)}));
     } else {
       last.amount = last.amount.sub(_value);
@@ -91,8 +94,8 @@ contract PeriodicToken is ERC20, Ownable {
     allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_value);
 
     if(holdings[_to].length == 0 ||
-       holdings[_to][holdings[_to].length-1].period < currentPeriod) {
-      holdings[_to].push(Balance({period: currentPeriod,
+       holdings[_to][holdings[_to].length-1].period < currentPeriod()) {
+      holdings[_to].push(Balance({period: currentPeriod(),
                                   amount: last.amount.add(_value)}));
     } else {
       holdings[_to][holdings[_to].length-1].amount =
@@ -127,7 +130,5 @@ contract PeriodicToken is ERC20, Ownable {
     }
     Approval(msg.sender, _spender, allowed[msg.sender][_spender]);
     return true;
-  }
-  
-  event PeriodBump(address indexed caller);
+  } 
 }
