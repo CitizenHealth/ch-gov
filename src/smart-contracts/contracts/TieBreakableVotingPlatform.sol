@@ -9,8 +9,7 @@ contract TieBreakableVotingPlatform is BasicVotingPlatform, Ownable {
   mapping (uint256 => bool) broken;
   mapping (uint256 => uint256) castingVote;
 
-  function breakTie(uint256 _ballotId, uint256 _castingVote) public returns (bool) {
-    require(_ballotId < ballots.length);
+  function breakTie(uint256 _ballotId, uint256 _castingVote) public validBallotId(_ballotId) returns (bool) {
     require(!broken[_ballotId]);
     require(ballots[_ballotId].creator == msg.sender ||
             owner == msg.sender); // needs better logic 
@@ -23,8 +22,7 @@ contract TieBreakableVotingPlatform is BasicVotingPlatform, Ownable {
     return true;
   }
 
-  function ballotResult(uint256 _ballotId) public view returns (Result, Proposal[]) {
-    require(_ballotId < ballots.length);
+  function ballotResult(uint256 _ballotId) public validBallotId(_ballotId) view returns (Result, Proposal[]) {
     if(broken[_ballotId]) {
       Proposal[] memory prop = new Proposal[](1);
       Proposal memory winner = proposals[_ballotId][castingVote[_ballotId]];

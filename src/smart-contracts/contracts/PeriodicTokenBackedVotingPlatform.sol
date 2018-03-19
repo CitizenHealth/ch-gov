@@ -19,13 +19,11 @@ contract PeriodicTokenBackedVotingPlatform is BasicVotingPlatform {
     return id;
   }
 
-  function getVotesFor(address _voter, uint256 _ballotId) public view returns (uint256) {
-    require(_ballotId < ballots.length);
+  function getVotesFor(address _voter, uint256 _ballotId) public validBallotId(_ballotId) view returns (uint256) {
     return backingToken.balanceAt(_voter, created[_ballotId]);
   }
 
-  function ballotStatus(uint256 _ballotId) public view returns (Status) {
-    require(_ballotId < ballots.length);
+  function ballotStatus(uint256 _ballotId) public validBallotId(_ballotId) view returns (Status) {
     uint256 current = backingToken.currentPeriod();
     uint256 start = created[_ballotId];
     if(current.sub(start) <= amenableTime) {

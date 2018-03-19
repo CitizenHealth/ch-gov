@@ -10,6 +10,11 @@ contract BasicVotingPlatform is VotingPlatform {
   mapping(uint256 => Proposal[]) public proposals;
   mapping(address => mapping (uint256 => bool)) public voted;
 
+  modifier validBallotId(uint256 _ballotId) {
+    require(_ballotId < ballots.length);
+    _;
+  }
+
   function createBallot(bytes32 _title) public returns (uint256) {
     uint256 _id = ballots.length;
     ballots.push(Ballot({id: _id,
@@ -20,8 +25,7 @@ contract BasicVotingPlatform is VotingPlatform {
     return _id;
   }
 
-  function createProposal(uint256 _ballotId, string _proposal) public returns (uint256) {
-    require(_ballotId < ballots.length);
+  function createProposal(uint256 _ballotId, string _proposal) public validBallotId(_ballotId) returns (uint256) {
     require(ballotStatus(_ballotId) == Status.AMENABLE);
 
     uint256 _id = proposals[_ballotId].length;
@@ -34,10 +38,9 @@ contract BasicVotingPlatform is VotingPlatform {
     return _id;
   }
 
-  function getVotesFor(address _voter, uint256 _ballotId) public view returns (uint256);
+  function getVotesFor(address _voter, uint256 _ballotId) public validBallotId(_ballotId) view returns (uint256);
 
   function vote(uint256 _ballotId, uint256 _proposalId) public returns (bool) {
-    require(_ballotId < ballots.length);    
     require(ballotStatus(_ballotId) == Status.OPEN);
     require(proposals[_ballotId].length < _proposalId);
     require(!voted[msg.sender][_ballotId]);
@@ -50,9 +53,7 @@ contract BasicVotingPlatform is VotingPlatform {
     return true;
   }
   
-  function ballotResult(uint256 _ballotId) public view returns (Result, Proposal[]) {
-    require(ballots.length < _ballotId);
-
+  function ballotResult(uint256 _ballotId) public validBallotId(_ballotId) view returns (Result, Proposal[]) {
     if(ballotStatus(_ballotId) != Status.AMENABLE &&
        proposals[_ballotId].length == 0) {
       return (Result.INVALID, new Proposal[](0));
