@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  devnet:
+    build:
+      context: ..
+      dockerfile: vm/Dockerfile.ganache
+    entrypoint: ganache-cli
+    command: -b 3
+  devbox:
+    build:
+      context: ..
+      dockerfile: vm/Dockerfile.truffle
+    tty: true
+    volumes:
+      - ../src/:/src/
+    depends_on:
+      - "devnet"
+    entrypoint: /bin/sh

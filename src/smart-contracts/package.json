@@ -1,0 +1,17 @@
+{
+  "name": "ch-gov-smart-contracts",
+  "version": "0.0.1",
+  "description": "Citizen Health smart contracts for governance",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "James Cunningham",
+  "license": "MIT",
+  "dependencies": {
+    "zeppelin-solidity": "1.7.0"
+  }
+}

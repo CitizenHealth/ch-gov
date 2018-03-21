@@ -1,0 +1,10 @@
+FROM node:9.7.1-alpine
+
+ENV TMPDIR /tmp/
+WORKDIR /src/
+
+RUN apk add -t .gyp --no-cache git python g++ make \
+    && npm install -g truffle \
+    && apk del .gyp
+
+ENTRYPOINT ["truffle"]
