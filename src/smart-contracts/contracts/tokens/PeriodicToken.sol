@@ -30,7 +30,7 @@ contract PeriodicToken is ERC20, Ownable {
     return totalSupply_;
   }
 
-  function blanaceOf(address _owner) public view returns (uint256) {
+  function balanceOf(address _owner) public view returns (uint256) {
    Balance[] memory balances = holdings[_owner];
     if(balances.length == 0) {
       return 0;
