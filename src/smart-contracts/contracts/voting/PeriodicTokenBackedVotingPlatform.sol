@@ -9,8 +9,8 @@ contract PeriodicTokenBackedVotingPlatform is BasicVotingPlatform {
 
   PeriodicToken public backingToken;
   mapping (uint256 => uint256) internal created;
-  uint256 amenableTime;
-  uint256 openTime;
+  uint256 amenablePeriod;
+  uint256 openPeriod;
 
   function createBallot(bytes32 _title) public returns (uint256) {
     uint256 id = super.createBallot(_title);
@@ -26,9 +26,9 @@ contract PeriodicTokenBackedVotingPlatform is BasicVotingPlatform {
   function ballotStatus(uint256 _ballotId) public validBallotId(_ballotId) view returns (Status) {
     uint256 current = backingToken.currentPeriod();
     uint256 start = created[_ballotId];
-    if(current.sub(start) <= amenableTime) {
+    if(current.sub(start) <= amenablePeriod) {
       return Status.AMENABLE;
-    } else if(current.sub(start) <= amenableTime.add(openTime)) {
+    } else if(current.sub(start) <= amenablePeriod.add(openPeriod)) {
       return Status.OPEN;
     } else {
       return Status.CLOSED;
