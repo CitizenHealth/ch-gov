@@ -1,7 +1,7 @@
 pragma solidity ^0.4.18;
 
 import './BasicVotingPlatform.sol';
-import './PeriodicToken.sol';
+import '../tokens/PeriodicToken.sol';
 import 'zeppelin-solidity/contracts/math/SafeMath.sol';
 
 contract PeriodicTokenBackedVotingPlatform is BasicVotingPlatform {
