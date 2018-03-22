@@ -5,8 +5,24 @@ services:
     build:
       context: ..
       dockerfile: vm/Dockerfile.ganache
+    ports:
+      - 8545:8545
     entrypoint: ganache-cli
-    command: -b 3
+    command: -b 3 -i 987654321
+  dapp:
+    build:
+      context: ..
+      dockerfile: vm/Dockerfile.dapp
+    volumes: 
+      - ../src/dapp/:/src/
+      - /src/build/
+    environment:
+      - HOST=0.0.0.0
+    tty: true
+    ports:
+      - 3000:3000
+    depends_on:
+      - "devnet"
   devbox:
     build:
       context: ..

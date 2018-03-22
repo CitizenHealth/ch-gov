@@ -284,6 +284,7 @@ function runDevServer(host, port, protocol) {
 function run(port) {
   var protocol = process.env.HTTPS === 'true' ? "https" : "http";
   var host = process.env.HOST || 'localhost';
+  console.log("host as: " + host);
   setupCompiler(host, port, protocol);
   runDevServer(host, port, protocol);
 }
