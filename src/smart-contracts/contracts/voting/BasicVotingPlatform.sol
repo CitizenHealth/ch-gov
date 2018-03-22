@@ -25,6 +25,10 @@ contract BasicVotingPlatform is VotingPlatform {
     return _id;
   }
 
+  function getBallots() public view returns (Ballot[]) {
+    
+  }
+
   function createProposal(uint256 _ballotId, string _proposal) public validBallotId(_ballotId) returns (uint256) {
     require(ballotStatus(_ballotId) == Status.AMENABLE);
 
@@ -40,7 +44,7 @@ contract BasicVotingPlatform is VotingPlatform {
 
   function getVotesFor(address _voter, uint256 _ballotId) public validBallotId(_ballotId) view returns (uint256);
 
-  function hasVoted(uint256 _voter, uint256 _ballotId) public view returns (bool) {
+  function hasVoted(address _voter, uint256 _ballotId) public view returns (bool) {
     return voted[_voter][_ballotId];
   }
 
