@@ -1,49 +1,102 @@
 import React, { Component } from 'react'
+import { Tabs, TabLink, TabContent } from 'react-tabs-redux'
 import { ContractData, ContractForm } from 'drizzle-react-components'
-import logo from '../../logo.png'
+import logo from '../../ch-logo.png'
 
 class Home extends Component {
+
+  constructor(props, context) {
+    super(props)
+    console.log(context);
+    const { web3 } = context.drizzle
+    const { accounts } = props
+    const Medex = context.drizzle.contracts.MedexToken
+    this.state = {
+      web3,
+      data: {
+        decimals: Medex.methods.decimals.cacheCall(),
+        period: Medex.methods.currentPeriod.cacheCall(),
+        balance: Medex.methods.balanceOf.cacheCall(accounts[0])
+      }
+    }
+  }
+
+  getBalance() {
+    if (this.props.drizzleStatus.initialized) {
+      if (this.state.data.decimals in this.props.MedexToken.decimals &&
+          this.state.data.balance in this.props.MedexToken.balanceOf){
+        var decimals =  this.props.MedexToken.decimals[this.state.data.decimals].value;
+        var balance =  this.props.MedexToken.balanceOf[this.state.data.balance].value;
+        return balance / Math.pow(10, decimals);
+      }
+    }
+    return "...";
+  }
+
+  getDecimals() {
+    if (this.props.drizzleStatus.initialized) {
+      if (this.state.data.decimals in this.props.MedexToken.decimals){
+        return this.props.MedexToken.decimals[this.state.data.decimals].value;
+      }
+    }
+    return "...";
+  }
+
+  getPeriod() {
+    if (this.props.drizzleStatus.initialized) {
+      if (this.state.data.period in this.props.MedexToken.currentPeriod) {
+        return this.props.MedexToken.currentPeriod[this.state.data.period].value;
+      }
+    }
+    return "";
+  }
+  
   render() {
+    console.log(this.state);
+    console.log(this.props);
+
     return (
       <main className="container">
         <div className="pure-g">
           <div className="pure-u-1-1 header">
             <img src={logo} alt="drizzle-logo" />
-            <h1>Drizzle Examples</h1>
-            <p>Examples of how to get started with Drizzle in various situations.</p>
-
+            <h1>Citizen Health Governance Portal</h1>
+            <p>Vote on Citizen Health Governance using Medex Tokens</p>
+        <p><strong>Current Medex Balance</strong>: <ContractData contract="MedexToken" method="balanceOf" methodArgs={[this.props.accounts[0]]} /> </p>
+        <br/>
+        <Tabs className="tabs">
+        <div className="tab-links">
+            <TabLink to="tab1">Current Votes</TabLink>
+            <TabLink to="tab2">Upcoming Votes</TabLink>
+            <TabLink to="tab3">Previous Votes</TabLink>
+        </div>
+ <TabContent for="tab1">
+          <div className="pure-u-1-1">
+        <p>Current Period: {this.getPeriod()}</p>
+            <p>Vote on the following issues</p>
             <br/><br/>
           </div>
+</TabContent>
+
+<TabContent for="tab2">
+  <div className="pure-u-1-1">            
+            <p>View upcoming votes and add proposals</p>
+            <br/><br/>
+          </div>
+</TabContent>
+
+<TabContent for="tab3">
+
+          <div className="pure-u-1-1">
+            <p>View the results of previous votes</p>
+          </div>
+
+</TabContent>        
+        </Tabs>
+          </div>       
         
-          <div className="pure-u-1-1">
-            <h2>SimpleStorage</h2>
-            <p>This shows a simple ContractData component with no arguments, along with a form to set its value.</p>
-            <p><strong>Stored Value</strong>: <ContractData contract="SimpleStorage" method="storedData" /></p>
-            <ContractForm contract="SimpleStorage" method="set" />
 
-            <br/><br/>
-          </div>
-
-          <div className="pure-u-1-1">
-            <h2>TutorialToken</h2>
-            <p>Here we have a form with custom, friendly labels. Also note the token symbol will not display a loading indicator. We've suppressed it with the <code>hideIndicator</code> prop because we know this variable is constant.</p>
-            <p><strong>Total Supply</strong>: <ContractData contract="TutorialToken" method="totalSupply" methodArgs={[{from: this.props.accounts[0]}]} /> <ContractData contract="TutorialToken" method="symbol" hideIndicator /></p>
-            <p><strong>My Balance</strong>: <ContractData contract="TutorialToken" method="balanceOf" methodArgs={[this.props.accounts[0]]} /></p>
-            <h3>Send Tokens</h3>
-            <ContractForm contract="TutorialToken" method="transfer" labels={['To Address', 'Amount to Send']} />
-
-            <br/><br/>
-          </div>
-
-          <div className="pure-u-1-1">
-            <h2>ComplexStorage</h2>
-            <p>Finally this contract shows data types with additional considerations. Note in the code the strings below are converted from bytes to UTF-8 strings and the device data struct is iterated as a list.</p>
-            <p><strong>String 1</strong>: <ContractData contract="ComplexStorage" method="string1" toUtf8 /></p>
-            <p><strong>String 2</strong>: <ContractData contract="ComplexStorage" method="string2" toUtf8 /></p>
-            <strong>Single Device Data</strong>: <ContractData contract="ComplexStorage" method="singleDD" />
-
-            <br/><br/>
-          </div>
+        
         </div>
       </main>
     )

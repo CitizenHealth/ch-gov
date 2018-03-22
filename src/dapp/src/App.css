@@ -108,3 +108,28 @@ ul li:not(:last-child) {
   background: darkseagreen;
   border: 1px solid darkgreen;
 }
+
+.tabs {
+    display: inline-block;
+    marginRight: 30px;
+    verticalAlign: top;
+}
+
+.tab-content {
+    margin-top: 20px;
+}
+
+.tab-link {
+    height: 30px;
+    lineHeight: 30px;
+    padding: 0 15px;
+    cursor: pointer;
+    borderBottom: 2px solid transparent;
+    display: inline-block;
+    outline: none;
+    font-size: 1.3em;
+}
+
+.tab-link-active {
+    border: 2px solid grey;
+}

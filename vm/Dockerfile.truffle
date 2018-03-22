@@ -1,10 +1,12 @@
 FROM node:9.7.1-alpine
 
 ENV TMPDIR /tmp/
-WORKDIR /src/
+WORKDIR /src/smart-contracts/
 
 RUN apk add -t .gyp --no-cache git python g++ make \
     && npm install -g truffle \
     && apk del .gyp
 
-ENTRYPOINT ["truffle"]
+ENTRYPOINT [""]
+
+CMD rm -rf build/contracts && truffle compile && truffle migrate

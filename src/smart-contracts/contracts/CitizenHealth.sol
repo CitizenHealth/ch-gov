@@ -9,8 +9,8 @@ contract CitizenHealth {
   MedexToken medex;
   VotingPlatform votingPlatform;
 
-  function CitizenHealth() public {
-    medex = new MedexToken();
-    votingPlatform = new CitizenHealthVotingPlatform(medex);
+  function CitizenHealth(MedexToken _medex, VotingPlatform _platform) public {
+    medex = _medex;
+    votingPlatform = _platform;
   }
 }

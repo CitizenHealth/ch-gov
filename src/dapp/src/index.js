@@ -11,9 +11,11 @@ import HomeContainer from './layouts/home/HomeContainer'
 import LoadingContainer from './layouts/loading/LoadingContainer'
 
 // Contracts
-import ComplexStorage from './../build/contracts/ComplexStorage.json'
-import SimpleStorage from './../build/contracts/SimpleStorage.json'
-import TutorialToken from './../build/contracts/TutorialToken.json'
+import CitizenHealth from './../build/contracts/CitizenHealth.json'
+import MedexToken from './../build/contracts/MedexToken.json'
+// import SimpleStorage from './../build/contracts/SimpleStorage.json'
+// import TutorialToken from './../build/contracts/TutorialToken.json'
+
 
 // Redux Store
 import store from './store'
@@ -31,9 +33,8 @@ const options = {
     }
   },
   contracts: [
-    ComplexStorage,
-    SimpleStorage,
-    TutorialToken
+    CitizenHealth,
+    MedexToken
   ],
   events: {
     SimpleStorage: ['StorageSet']

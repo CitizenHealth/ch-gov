@@ -10,4 +10,4 @@ RUN apk add -t .gyp --no-cache git python g++ make \
 
 ENTRYPOINT [""]
 
-CMD rm -rf /src/build/contracts && truffle compile && truffle migrate && npm run start
+CMD npm run start

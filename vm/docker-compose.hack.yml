@@ -1,5 +1,8 @@
 version: '3'
 
+volumes:
+  build:
+
 services:
   devnet:
     build:
@@ -9,13 +12,22 @@ services:
       - 8545:8545
     entrypoint: ganache-cli
     command: -b 3 -i 987654321
+  buildbox:
+    build:
+      context: ..
+      dockerfile: vm/Dockerfile.truffle
+    volumes:
+      - ../src/smart-contracts:/src/smart-contracts
+      - build:/src/smart-contracts/build/
+    depends_on:
+      - "devnet"
   dapp:
     build:
       context: ..
       dockerfile: vm/Dockerfile.dapp
     volumes: 
       - ../src/dapp/:/src/
-      - /src/build/
+      - build:/src/build/
     environment:
       - HOST=0.0.0.0
     tty: true
@@ -30,6 +42,8 @@ services:
     tty: true
     volumes:
       - ../src/:/src/
+      - build:/src/smart-contracts/build/
     depends_on:
       - "devnet"
+      - "dapp"
     entrypoint: /bin/sh
