@@ -39,6 +39,8 @@ contract VotingPlatform {
 
   function vote(uint256 _ballotId, uint256 _proposalId) public returns (bool);
 
+  function hasVoted(uint256 _voter, uint256 _ballotId) public view returns (bool);
+
   function ballotStatus(uint256 _ballotId) public view returns (Status);
 
   function ballotResult(uint256 _ballotId) public view returns (Result, Proposal[]);

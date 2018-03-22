@@ -40,7 +40,11 @@ contract BasicVotingPlatform is VotingPlatform {
 
   function getVotesFor(address _voter, uint256 _ballotId) public validBallotId(_ballotId) view returns (uint256);
 
-  function vote(uint256 _ballotId, uint256 _proposalId) public returns (bool) {
+  function hasVoted(uint256 _voter, uint256 _ballotId) public view returns (bool) {
+    return voted[_voter][_ballotId];
+  }
+
+  function vote(uint256 _ballotId, uint256 _proposalId) public validBallotId(_ballotId) returns (bool) {
     require(ballotStatus(_ballotId) == Status.OPEN);
     require(proposals[_ballotId].length < _proposalId);
     require(!voted[msg.sender][_ballotId]);
