@@ -25,8 +25,17 @@ contract BasicVotingPlatform is VotingPlatform {
     return _id;
   }
 
-  function getBallots() public view returns (Ballot[]) {
-    
+  function getBallots() public view returns (uint256[]) {
+    uint256[] memory ids = new uint256[](ballots.length);
+    for (uint i = 0; i < ballots.length; i++) {
+      ids[i] = ballots[i].id;
+    }
+    return ids;
+  }
+
+  function getBallot(uint256 _ballotId) public validBallotId(_ballotId) view returns (bytes32, address) {
+    Ballot storage ballot = ballots[_ballotId];
+    return (ballot.title, ballot.creator);
   }
 
   function createProposal(uint256 _ballotId, string _proposal) public validBallotId(_ballotId) returns (uint256) {
@@ -40,6 +49,12 @@ contract BasicVotingPlatform is VotingPlatform {
     
     ProposalCreated(msg.sender, _ballotId, _proposal);    
     return _id;
+  }
+
+  function getProposal(uint256 _ballotId, uint256 _proposalId) public validBallotId(_ballotId) view returns (string, address, uint256) {
+    require(proposals[_ballotId].length < _proposalId);
+    Proposal storage prop = proposals[_ballotId][_proposalId];
+    return(prop.proposal, prop.proposer, prop.votes); 
   }
 
   function getVotesFor(address _voter, uint256 _ballotId) public validBallotId(_ballotId) view returns (uint256);
